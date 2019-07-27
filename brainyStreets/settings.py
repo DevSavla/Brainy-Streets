@@ -27,7 +27,7 @@ SECRET_KEY = 'w_p^&8d&cdvupy+dl+pb4l322rrtb7ssz!b=ubhnfhvm6+dg^c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'brainy-streets.herokuapp.com']
 
 
 # Application definition
