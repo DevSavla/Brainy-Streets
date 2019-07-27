@@ -8,11 +8,6 @@ var geocoder = platform.getGeocodingService();
 // Obtain the default map types from the platform object:
 var defaultLayers = platform.createDefaultLayers();
 
-function getZoomByAccuracy(accuracy) {
-    invacc = 2 * 1000/accuracy;
-    return Math.floor(11 + invacc);
-}
-
 // Gives user's location
 if(navigator.geolocation) {
 
@@ -39,7 +34,7 @@ if(navigator.geolocation) {
             document.getElementById('wizmap'),
             defaultLayers.vector.normal.map,
             {
-                zoom: getZoomByAccuracy(position.coords.accuracy),
+                zoom: 12,
                 center: {lat: position.coords.latitude, lng: position.coords.longitude}
             }
         );
