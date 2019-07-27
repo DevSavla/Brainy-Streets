@@ -26,12 +26,7 @@ class SaveData(generics.GenericAPIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
-        form_data = json.loads(request.body.decode())
-        if len(form_data)>0:
-            resp = {'form_data': 1}
-        else:
-            resp = {'form_data': 0}
-        return JsonResponse(resp, status=status.HTTP_200_OK)
+        return JsonResponse({'body': request.body, 'POST': request.POST}, status=status.HTTP_200_OK)
 
 
 class GetGeoJson(generics.GenericAPIView):
