@@ -28,3 +28,19 @@ class WeatherData(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         return JsonResponse({}, status=status.HTTP_200_OK)
+
+class GetGeoJson(generics.GenericAPIView):
+    permission_classes = (AllowAny, )
+
+    def get(self, request):
+        GeoJson = {
+            "type": "FeatureCollection",
+            "features": []
+        }
+
+        all_data = [[ [72.828573, 18.931683], [72.838573, 18.931683], [72.838573, 18.941683] ]]
+
+        for data in all_data:
+            GeoJson['features'].append({ "type": "line", "geometry": { "type": "LineString", "coordinates": data } })
+
+        return JsonResponse(GeoJson, status=status.HTTP_200_OK)

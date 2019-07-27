@@ -66,7 +66,7 @@ function newmap(latitude, longitude) {
 
     map.addDataSource(omvDataSource);
 
-    fetch('https://brainy-streets.herokuapp.com/static/data/mydata.geojson')
+    fetch(window.location.href.split('/').slice(0,3).join('/')+'/api/get-geojson/')
     .then(data => data.json())
     .then(data => {
     const geoJsonDataProvider = new harp.GeoJsonDataProvider("wireless-hotspots", data);
