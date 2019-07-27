@@ -26,7 +26,10 @@ class SaveData(generics.GenericAPIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
-        return JsonResponse({'body': request.body, 'POST': request.POST}, status=status.HTTP_200_OK)
+        try:
+            return JsonResponse({'body': request.body, 'POST': request.POST}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_200_OK)
 
 
 class GetGeoJson(generics.GenericAPIView):
