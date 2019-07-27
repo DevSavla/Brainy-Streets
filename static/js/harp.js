@@ -61,12 +61,12 @@ function newmap(latitude, longitude) {
     baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
     apiFormat: harp.APIFormat.XYZOMV,
     styleSetName: "tilezen",
-    authenticationCode: 'AAd0VL_Yco9uyRjQwTOEKWY',
+    authenticationCode: 'AOSoVWzHTbZ1FI7p9W795eI',
     });
 
     map.addDataSource(omvDataSource);
 
-    fetch('http://127.0.0.1:8000/static/data/mydata.geojson')
+    fetch('https://brainy-streets.herokuapp.com/static/data/mydata.geojson')
     .then(data => data.json())
     .then(data => {
     const geoJsonDataProvider = new harp.GeoJsonDataProvider("wireless-hotspots", data);
@@ -85,7 +85,20 @@ function newmap(latitude, longitude) {
               color: "#7ED321",
               size: 15
            }
-        }]
+        },
+        {
+            "when": "$geometryType ^= 'line'",
+            "renderOrder": 1000,
+            "technique": "solid-line",
+            "attr": {
+               "color": "#D73060",
+               "transparent": true,
+               "opacity": 1,
+               "metricUnit": "Pixel",
+               "lineWidth": 10
+            }
+         }
+        ]
         geoJsonDataSource.setStyleSet(styles);
         map.update();
      });
