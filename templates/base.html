@@ -25,7 +25,23 @@
   <header class="header-global">
     <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent headroom">
       <div class="container">
-        <a class="navbar-brand mr-lg-5" href="{% url 'home' %}"><img src="{% static 'img/logo-transparent.png'%}" style="height: 5vh"></a>
+        <a class="navbar-brand mr-lg-5" href="{% url 'home' %}"><img src="{% static 'img/logo-transparent.png'%}" style="height: 7vh, max-width: 25vh"></a>
+        <!-- <ul class="navbar-nav align-items-lg-center ml-xs-auto ml-lg-auto">
+          <li class="nav-item d-lg-block ml-xs-4">
+            <a href="{% url 'data-desc' %}" class="btn btn-neutral btn-icon">
+              <i class="fa fa-rocket"></i>
+              <span class="nav-link-inner--text">Data</span>
+            </a>
+          </li>
+          <li class="nav-item d-lg-block ml-xs-4">
+            <a href="{% url 'harp' %}" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon">
+                <i class="fa fa-building"></i>
+              </span>
+              <span class="nav-link-inner--text">Harp</span>
+            </a>
+          </li>
+        </ul> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -89,7 +105,7 @@
                 <span class="nav-link-inner--text">Examples</span>
               </a>
               <div class="dropdown-menu">
-                <a href="{% url 'landing' %}" class="dropdown-item">Landing</a>
+                <a href="{% url 'data-desc' %}" class="dropdown-item">Data</a>
                 <a href="{% url 'harp' %}" class="dropdown-item">Harp</a>
               </div>
             </li>

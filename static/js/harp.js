@@ -76,8 +76,12 @@ function newmap(latitude, longitude, daynight) {
     mapControls.maxPitchAngle = 90;
     mapControls.setRotation(0,50);
 
-    map.resize(window.innerWidth * 0.9, window.innerHeight * 0.9);
-    window.onresize = () => map.resize(window.innerWidth * 0.9, window.innerHeight * 0.9);
+    map.resize(document.getElementById('mapdiv').clientWidth, document.getElementById('mapdiv').clientHeight);
+    window.onresize = () => {
+        map.resize(document.getElementById('mapdiv').clientWidth, document.getElementById('mapdiv').clientHeight);
+        canvas.height = document.getElementById('mapdiv').clientHeight;
+        canvas.width = document.getElementById('mapdiv').clientWidth;
+    }
 
     const omvDataSource = new harp.OmvDataSource({
     baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
@@ -91,7 +95,6 @@ function newmap(latitude, longitude, daynight) {
     fetch(window.location.href.split('/').slice(0,3).join('/')+'/api/get-geojson/'+latitude.toString()+"/"+longitude.toString())
     .then(data => data.json())
     .then(data => {
-        console.log(data);
     const geoJsonDataProvider = new harp.GeoJsonDataProvider("wireless-hotspots", data);
     const geoJsonDataSource = new harp.OmvDataSource({
         dataProvider: geoJsonDataProvider,
@@ -110,20 +113,26 @@ function newmap(latitude, longitude, daynight) {
            }
         },
         {
-            "when": "$geometryType ^= 'line'",
-            "renderOrder": 10000,
-            "technique": "solid-line",
-            "attr": {
-               "color": lineColor,
-               "transparent": true,
-               "opacity": 1,
-               "metricUnit": "Pixel",
-               "lineWidth": 10
+            when: "$geometryType ^= 'line'",
+            renderOrder: 10000,
+            technique: "solid-line",
+            attr: {
+               color: lineColor,
+               transparent: true,
+               opacity: 1,
+               metricUnit: "Pixel",
+               lineWidth: 10
             }
          }
         ]
         geoJsonDataSource.setStyleSet(styles);
         map.update();
      });
+
+     canvas.onclick = evt => {
+        const geoPosition = map.getGeoCoordinatesAt(evt.pageX, evt.pageY);
+        document.getElementById('selectedpoint').innerText = geoPosition.latitude + " " + geoPosition.longitude;
+        // get data from server for geoPosition coordinates
+     }
     })
 }

@@ -29,3 +29,7 @@ class Sensor(models.Model):
             longitude_direction = " W"
 
         return str(self.latitude) + latitude_direction + self(self.longitude) + longitude_direction
+
+
+# class Data(models.Model):
+#     created = models.DateTimeField(auto_now=True)

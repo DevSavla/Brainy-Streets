@@ -16,17 +16,17 @@ import json
 def home(request):
     return render(request, 'index.html')
 
-def landing(request):
-    return  render(request, 'landing.html')
-
 def harp(request):
     return render(request, 'harp.html')
 
+def datadetails(request):
+    return render(request, 'datadetails.html')
 
 class SaveData(generics.GenericAPIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
+
         return JsonResponse({}, status=status.HTTP_200_OK)
 
 
@@ -122,3 +122,10 @@ class NewRoad(generics.GenericAPIView):
         except Exception as e:
             response_data = {'error_message': "Cannot sign you up due to " + str(e)}
             return JsonResponse(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetData(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        return JsonResponse({}, status=status.HTTP_200_OK)
