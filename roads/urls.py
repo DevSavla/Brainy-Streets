@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -6,5 +6,6 @@ urlpatterns = [
     path('landing/', views.landing, name="landing"),
     path('harp/', views.harp, name="harp"),
     path('api/weather/', views.WeatherData.as_view(), name="weather"),
-    path('api/get-geojson/', views.GetGeoJson.as_view(), name="get-geojson")
+    re_path(r'^api/get-geojson/(?P<latitude>\d+\.\d+)/(?P<longitude>\d+\.\d+)/$', views.GetGeoJson.as_view(), name="get-geojson"),
+    path('api/new-road/', views.NewRoad.as_view(), name="new-road")
 ]

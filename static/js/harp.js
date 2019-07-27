@@ -66,7 +66,7 @@ function newmap(latitude, longitude) {
 
     map.addDataSource(omvDataSource);
 
-    fetch(window.location.href.split('/').slice(0,3).join('/')+'/api/get-geojson/')
+    fetch(window.location.href.split('/').slice(0,3).join('/')+'/api/get-geojson/'+latitude.toString()+"/"+longitude.toString())
     .then(data => data.json())
     .then(data => {
     const geoJsonDataProvider = new harp.GeoJsonDataProvider("wireless-hotspots", data);
