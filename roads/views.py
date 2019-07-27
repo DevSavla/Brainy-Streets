@@ -22,8 +22,9 @@ def landing(request):
 def harp(request):
     return render(request, 'harp.html')
 
-class WeatherData(generics.GenericAPIView):
-    permission_classes = (IsAuthenticated, )
+
+class SaveData(generics.GenericAPIView):
+    permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
         return JsonResponse({}, status=status.HTTP_200_OK)
