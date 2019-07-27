@@ -54,6 +54,8 @@ class GetGeoJson(generics.GenericAPIView):
                 }
             }
             GeoJson['features'].append(data)
+            if not sensor.road in roads:
+                roads.append(sensor.road)
 
         for road in roads:
             data = {
@@ -72,36 +74,42 @@ class NewRoad(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
+        form_data = json.loads(request.body.decode())
         try:
-            lane_count = request.POST.get('lane_count')
-            sensors = request.POST.get('sensors')
+            lane_count = form_data['lane_count']
+            sensors = form_data['sensors']
         except:
             lane_count = None
             sensors = []
 
         try:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            two_way = request.POST.get('2way')
+            username = form_data['username']
+            password = form_data['password']
+            two_way = form_data['2way']
 
             for sensor in sensors:
-                Sensor.objects.create(
-                    latitude=sensor['latitude'],
-                    longitude=sensor['longitude']
-                )
+                if Sensor.objects.filter(latitude=sensor['latitude'],longitude=sensor['longitude']).exists():
+                    raise Exception("Sensor already exists")
 
             road = Road.objects.create(
                 username=username,
                 password=password,
                 lane_count=lane_count,
                 two_way=two_way,
-                f_name=username.split(' ')[:-1].join(),
-                l_name=username.split(' ')[-1]
+                first_name=' '.join(username.split(' ')[:-1]),
+                last_name=username.split(' ')[-1]
             )
             road.set_password(password)
             road.save()
 
             login(request, road)
+
+            for sensor in sensors:
+                Sensor.objects.create(
+                latitude=sensor['latitude'],
+                longitude=sensor['longitude'],
+                road=road
+                )
 
             token, _ = Token.objects.get_or_create(user=road)
 
