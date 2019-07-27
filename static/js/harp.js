@@ -5,6 +5,10 @@ var platform = new H.service.Platform({
 
 var geocoder = platform.getGeocodingService();
 
+var coordinates = {};
+
+var cacheddaynight = "day";
+
 // Gives user's location
 if(navigator.geolocation) {
 
@@ -25,16 +29,34 @@ if(navigator.geolocation) {
             }
         );
 
+        coordinates = position.coords;
+
         // Instantiate (and display) a map object:
-        newmap(position.coords.latitude, position.coords.longitude);
+        newmap(position.coords.latitude, position.coords.longitude, "day");
     });
 }
 
-function newmap(latitude, longitude) {
+function daynightclicked(daynight) {
+    if(coordinates && cacheddaynight != daynight)
+    {
+        newmap(coordinates.latitude, coordinates.longitude, daynight);
+    }
+}
+
+function newmap(latitude, longitude, daynight) {
+    if(daynight=="night")
+    {
+        lineColor = "#FF0000",
+        pointColor = "#FFFF00"
+    }
+    else{
+        lineColor = "#000000",
+        pointColor = "#FFFFFF"
+    }
     const canvas = document.getElementById('map');
     const map = new harp.MapView({
     canvas,
-    theme: "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_night_reduced.json",
+    theme: "https://unpkg.com/@here/harp-map-theme@latest/resources/berlin_tilezen_"+daynight+"_reduced.json",
     //For tile cache optimization:
     maxVisibleDataSourceTiles: 40,
     tileCacheSize: 100
@@ -54,8 +76,8 @@ function newmap(latitude, longitude) {
     mapControls.maxPitchAngle = 90;
     mapControls.setRotation(0,50);
 
-    map.resize(window.innerWidth, window.innerHeight);
-    window.onresize = () => map.resize(window.innerWidth, window.innerHeight);
+    map.resize(window.innerWidth * 0.9, window.innerHeight * 0.9);
+    window.onresize = () => map.resize(window.innerWidth * 0.9, window.innerHeight * 0.9);
 
     const omvDataSource = new harp.OmvDataSource({
     baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
@@ -81,18 +103,18 @@ function newmap(latitude, longitude) {
         const styles = [{
            when: "$geometryType == 'point'",
            technique: "circles",
-           renderOrder: 10000,
+           renderOrder: 1000,
            attr: {
-              color: "#7ED321",
+              color: pointColor,
               size: 15
            }
         },
         {
             "when": "$geometryType ^= 'line'",
-            "renderOrder": 1000,
+            "renderOrder": 10000,
             "technique": "solid-line",
             "attr": {
-               "color": "#D73060",
+               "color": lineColor,
                "transparent": true,
                "opacity": 1,
                "metricUnit": "Pixel",
