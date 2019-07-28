@@ -30,7 +30,7 @@ class SaveData(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             form_data = request.body.decode()
-            form_data = form_data.split(' ')
+            form_data = form_data.split('\\r\\n')
 
             Data.objects.create(
                 aqi=form_data[0],
