@@ -94,7 +94,7 @@ class GetGeoJson(generics.GenericAPIView):
         }
 
         sensors = Sensor.objects.filter(latitude__lte=latitude+2000000, latitude__gte=latitude-2000000,
-                              longitude__lte=longitude+2000000, longitude__gte=longitude-2000000)
+                              longitude__lte=longitude+2000000, longitude__gte=longitude-2000000).order_by('id')
         roads = []
         for sensor in sensors:
             data = {
