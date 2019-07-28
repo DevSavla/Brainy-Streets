@@ -29,27 +29,26 @@ class SaveData(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            form_data = request.body.decode()+"$"
+            form_data = (request.body.decode()).split('Token')
             num = 0
             numbers = []
-            for char in form_data:
+            for char in form_data[0]+'$':
                 if char.isdigit():
                     num = num * 10 + int(char)
                 else:
-                    if num>0:
-                        numbers.append(num)
+                    numbers.append(num)
                     num = 0
 
             Data.objects.create(
                 aqi=numbers[0]/100,
                 ldr=numbers[1],
                 hits=numbers[2],
-                road=request.user,
+                road=Token.objects.get(key=form_data[1]).user,
             )
 
             return JsonResponse({}, status=status.HTTP_200_OK)
         except Exception as e:
-            return JsonResponse({'error': str(e), 'body': request.body.decode(), 'numbers': numbers}, status=status.HTTP_200_OK)
+            return JsonResponse({'error': str(e), 'body': request.body.decode(), 'numbers': numbers, 'token': form_data[1]}, status=status.HTTP_200_OK)
 
 
 class GetData(generics.GenericAPIView):
