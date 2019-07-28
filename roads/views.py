@@ -21,6 +21,9 @@ def home(request):
 def harp(request):
     return render(request, 'harp.html')
 
+def charts(request):
+    return render(request, 'charts.html')
+
 def datadetails(request):
     return render(request, 'datadetails.html')
 
@@ -58,21 +61,21 @@ class GetData(generics.GenericAPIView):
         latitude = int(float(kwargs['latitude'])*1000000)
         longitude = int(float(kwargs['longitude'])*1000000)
 
-        sensors = Sensor.objects.filter(latitude__lte=latitude+1000, longitude__lte=longitude+1000, latitude__gte=latitude-1000, longitude__gte=longitude-1000)
+        sensors = Sensor.objects.all()
 
         min = {'sensor': None, 'dist': None}
         for sensor in sensors:
             lat_diff = sensor.latitude - latitude
             long_diff = sensor.longitude - longitude
             dist = lat_diff * lat_diff + long_diff * long_diff
-            if (not min['dist'] or dist < min['dist']) and dist < 10000:
+            if (not min['dist'] or dist < min['dist']) and dist<5000000:
                 min['sensor'] = sensor
                 min['dist'] = dist
 
         if min['sensor']:
             road = min['sensor'].road
             data = Data.objects.filter(road=road)
-            return JsonResponse({'data': DataSerializer(data, many=True).data, 'road': RoadSerializer(road).data}, status=status.HTTP_200_OK)
+            return JsonResponse({'data': DataSerializer(data, many=True).data, 'road': RoadSerializer(road).data, 'sensor': str(min['sensor']), 'dist': min['dist']}, status=status.HTTP_200_OK)
         else:
             return JsonResponse({'data': []}, status=status.HTTP_200_OK)
 

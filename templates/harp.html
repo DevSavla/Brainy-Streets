@@ -43,8 +43,14 @@ type="text/javascript" charset="utf-8"></script>
                     <div class="col-xs-12 col-lg-8" id="mapdiv" style="min-height: 80vh; min-width: 50vw">
                         <canvas id="map" style="position: absolute; width: 100%; height: auto;">
                     </div>
-                    <div class="col-xs-12 col-lg-4 pl-5" id="selectedpoint">
-                        None Selected rn
+                    <div class="col-xs-12 col-lg-4 pl-5">
+                        <div id="selectedpointtext" class="pb-2" style="font-size:larger; color: #0099ff">
+                            No Point selected
+                        </div>
+                        <div id="AQIchartContainer" style="height: 200px; width: 80%;"></div>
+                        <div id="LDRchartContainer" style="height: 200px; width: 80%;"></div>
+                        <div id="TrafficchartContainer" style="height: 200px; width: 80%;"></div>
+                        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
                     </div>
                 </div>
             </div>
