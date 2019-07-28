@@ -28,7 +28,8 @@ class SaveData(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             form_data = json.loads(request.body.decode())
-            return JsonResponse(form_data, status=status.HTTP_200_OK, safe=False)
+            headers = request.META['CONTENT_TYPE']
+            return JsonResponse({'headers': headers, 'data': form_data}, status=status.HTTP_200_OK, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=status.HTTP_200_OK)
 
