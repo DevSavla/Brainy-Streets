@@ -21,9 +21,6 @@ def home(request):
 def harp(request):
     return render(request, 'harp.html')
 
-def charts(request):
-    return render(request, 'charts.html')
-
 def datadetails(request):
     return render(request, 'datadetails.html')
 
