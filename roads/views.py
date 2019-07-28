@@ -28,10 +28,17 @@ class SaveData(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             form_data = json.loads(request.body.decode())
-            headers = request.META['CONTENT_TYPE']
-            return JsonResponse({'headers': headers, 'data': form_data}, status=status.HTTP_200_OK, safe=False)
+
+            Data.objects.create(
+                aqi=form_data['aqi'],
+                ldr=form_data['ldr'],
+                hits=form_data['hits'],
+                road=request.user,
+            )
+
+            return JsonResponse({}, status=status.HTTP_200_OK)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=status.HTTP_200_OK)
+            return JsonResponse({'error': str(e), 'body': request.body.decode()}, status=status.HTTP_200_OK)
 
 
 class GetGeoJson(generics.GenericAPIView):

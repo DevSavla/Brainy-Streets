@@ -31,5 +31,9 @@ class Sensor(models.Model):
         return str(self.latitude) + latitude_direction + self(self.longitude) + longitude_direction
 
 
-# class Data(models.Model):
-#     created = models.DateTimeField(auto_now=True)
+class Data(models.Model):
+    created = models.DateTimeField(auto_now=True)
+    aqi = models.DecimalField(max_digits=5, decimal_places=2)
+    ldr = models.IntegerField()
+    hits = models.PositiveSmallIntegerField()
+    road = models.ForeignKey(Road, on_delete=models.CASCADE)
