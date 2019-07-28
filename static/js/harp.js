@@ -14,7 +14,7 @@ window.onload = function () {
 }
 
 function makeChart(label, data, container) {
-    if(data.length)
+    if(data)
     {
         data_obj = [{
             type: "line",
@@ -158,7 +158,25 @@ function newmap(latitude, longitude, daynight) {
 
      canvas.onclick = evt => {
         const geoPosition = map.getGeoCoordinatesAt(evt.pageX, evt.pageY);
-        document.getElementById('selectedpointtext').innerText = geoPosition.latitude.toFixed(6) + ", " + geoPosition.longitude.toFixed(6);
+        if (geoPosition.latitude >= 0)
+        {
+            lat = "°N, ";
+        }
+        else
+        {
+            geoPosition.latitude = -geoPosition.latitude;
+            lat = "°S, ";
+        }
+        if (geoPosition.longitude >= 0)
+        {
+            long = "°E";
+        }
+        else
+        {
+            geoPosition.longitude = -geoPosition.longitude;
+            long = "°W";
+        }
+        document.getElementById('selectedpointtext').innerText = geoPosition.latitude.toFixed(6) + lat + geoPosition.longitude.toFixed(6) + long;
 
         // console.log(geoPosition);
 
