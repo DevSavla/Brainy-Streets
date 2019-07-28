@@ -180,8 +180,8 @@ function newmap(latitude, longitude, daynight) {
                 organised_trafficdata.push({y: parseInt(data.data[i].hits)})
             }
             makeChart("Air Quality Index", organised_AQIdata, "AQI");
-            makeChart("Light Density", organised_AQIdata, "LDR");
-            makeChart("Traffic Density", organised_AQIdata, "Traffic");
+            makeChart("Light Density", organised_LDRdata, "LDR");
+            makeChart("Traffic Density", organised_trafficdata, "Traffic");
         }
         else
         {
