@@ -13,6 +13,8 @@ from rest_framework.authentication import TokenAuthentication
 import datetime
 import json
 
+from .serializers import *
+
 def home(request):
     return render(request, 'index.html')
 
@@ -27,12 +29,13 @@ class SaveData(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            form_data = json.loads(request.body.decode())
+            form_data = request.body.decode()
+            form_data = form_data.split(' ')
 
             Data.objects.create(
-                aqi=form_data['aqi'],
-                ldr=form_data['ldr'],
-                hits=form_data['hits'],
+                aqi=form_data[0],
+                ldr=form_data[1],
+                hits=form_data[2],
                 road=request.user,
             )
 
@@ -41,28 +44,54 @@ class SaveData(generics.GenericAPIView):
             return JsonResponse({'error': str(e), 'body': request.body.decode()}, status=status.HTTP_200_OK)
 
 
+class GetData(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, *args, **kwargs):
+        latitude = int(float(kwargs['latitude'])*1000000)
+        longitude = int(float(kwargs['longitude'])*1000000)
+
+        sensors = Sensor.objects.filter(latitude__lte=latitude+1000, longitude__lte=longitude+1000, latitude__gte=latitude-1000, longitude__gte=longitude-1000)
+
+        min = {'sensor': None, 'dist': None}
+        for sensor in sensors:
+            lat_diff = sensor.latitude - latitude
+            long_diff = sensor.longitude - longitude
+            dist = lat_diff * lat_diff + long_diff * long_diff
+            if (not min['dist'] or dist < min['dist']) and dist < 10000:
+                min['sensor'] = sensor
+                min['dist'] = dist
+
+        if min['sensor']:
+            road = min['sensor'].road
+            data = Data.objects.filter(road=road)
+            return JsonResponse({'data': DataSerializer(data, many=True).data, 'road': RoadSerializer(road).data}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({'data': []}, status=status.HTTP_200_OK)
+
+
 class GetGeoJson(generics.GenericAPIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, *args, **kwargs):
 
-        latitude = float(kwargs['latitude'])
-        longitude = float(kwargs['longitude'])
+        latitude = int(float(kwargs['latitude'])*1000000)
+        longitude = int(float(kwargs['longitude'])*1000000)
 
         GeoJson = {
             "type": "FeatureCollection",
             "features": []
         }
 
-        sensors = Sensor.objects.filter(latitude__lte=latitude+2, latitude__gte=latitude-2,
-                              longitude__lte=longitude+2, longitude__gte=longitude-2)
+        sensors = Sensor.objects.filter(latitude__lte=latitude+2000000, latitude__gte=latitude-2000000,
+                              longitude__lte=longitude+2000000, longitude__gte=longitude-2000000)
         roads = []
         for sensor in sensors:
             data = {
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [ sensor.longitude, sensor.latitude, 0.0 ]
+                    "coordinates": [ sensor.longitude/1000000, sensor.latitude/1000000, 0.0 ]
                 }
             }
             GeoJson['features'].append(data)
@@ -74,7 +103,7 @@ class GetGeoJson(generics.GenericAPIView):
                 "type": "line",
                 "geometry": {
                     "type": "LineString",
-                    "coordinates": [[ sensor.longitude, sensor.latitude ] for sensor in road.sensor_set.all()]
+                    "coordinates": [[ sensor.longitude/1000000, sensor.latitude/1000000 ] for sensor in road.sensor_set.all()]
                 }
             }
             GeoJson['features'].append(data)
@@ -118,8 +147,8 @@ class NewRoad(generics.GenericAPIView):
 
             for sensor in sensors:
                 Sensor.objects.create(
-                latitude=sensor['latitude'],
-                longitude=sensor['longitude'],
+                latitude=int(float(sensor['latitude'])*1000000),
+                longitude=int(float(sensor['longitude'])*1000000),
                 road=road
                 )
 
@@ -133,10 +162,3 @@ class NewRoad(generics.GenericAPIView):
         except Exception as e:
             response_data = {'error_message': "Cannot sign you up due to " + str(e)}
             return JsonResponse(response_data, status=status.HTTP_400_BAD_REQUEST)
-
-
-class GetData(generics.GenericAPIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-        return JsonResponse({}, status=status.HTTP_200_OK)

@@ -132,7 +132,14 @@ function newmap(latitude, longitude, daynight) {
      canvas.onclick = evt => {
         const geoPosition = map.getGeoCoordinatesAt(evt.pageX, evt.pageY);
         document.getElementById('selectedpoint').innerText = geoPosition.latitude + " " + geoPosition.longitude;
+
         // get data from server for geoPosition coordinates
+        fetch(window.location.href.split('/').slice(0,3).join('/')+'/api/get-data/'+latitude.toString()+"/"+longitude.toString())
+        .then(data => data.json())
+        .then(data => {
+        console.log(data);
+        });
+
      }
     })
 }

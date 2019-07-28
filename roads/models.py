@@ -11,8 +11,8 @@ class Road(AbstractUser):
 
 
 class Sensor(models.Model):
-    latitude = models.DecimalField(max_digits=13, decimal_places=8)
-    longitude = models.DecimalField(max_digits=13, decimal_places=8)
+    latitude = models.BigIntegerField()
+    longitude = models.BigIntegerField()
     road = models.ForeignKey(Road, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -28,7 +28,7 @@ class Sensor(models.Model):
         else:
             longitude_direction = " W"
 
-        return str(self.latitude) + latitude_direction + self(self.longitude) + longitude_direction
+        return str(self.latitude/1000000) + latitude_direction + str(self.longitude/1000000) + longitude_direction
 
 
 class Data(models.Model):
