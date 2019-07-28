@@ -113,7 +113,7 @@ class GetGeoJson(generics.GenericAPIView):
                 "type": "line",
                 "geometry": {
                     "type": "LineString",
-                    "coordinates": [[ sensor.longitude/1000000, sensor.latitude/1000000 ] for sensor in road.sensor_set.all()]
+                    "coordinates": [[ sensor.longitude/1000000, sensor.latitude/1000000 ] for sensor in road.sensor_set.all().order_by('id')]
                 }
             }
             GeoJson['features'].append(data)
