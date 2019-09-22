@@ -10,17 +10,14 @@ The system is designed with energy efficiency in mind. We have implemented solar
 
 **1. Smart Street Lighting System**
 
-a) During the day, when the sunlight intensity is above the visibility threshold and hence the street lights are not needed, the lights remain off. 
-
-b) At night or during otherwise dim conditions, when ambient light intensity is below the visibility threshold, our system kicks in. When an IR sensor detects a vehicle, it switches ON the next few lights automatically. Till the vehicle isn't detected crossing the next sensor, lights stay ON, so in case of emergency or breakdown, vehicles aren't left in darkness.
-
-c) In smog, fog or other low visibility conditions due to bad air quality, emergency high intensity lights are turned on.
+- During the day, when the sunlight intensity is above the visibility threshold and hence the street lights are not needed, the lights remain off. 
+- At night or during otherwise dim conditions, when ambient light intensity is below the visibility threshold, our system kicks in. When an IR sensor detects a vehicle, it switches ON the next few lights automatically. Till the vehicle isn't detected crossing the next sensor, lights stay ON, so in case of emergency or breakdown, vehicles aren't left in darkness.
+- In smog, fog or other low visibility conditions due to bad air quality, emergency high intensity lights are turned on.
 	
 **2. Interconnected Roads Concept**
 
-a) Roads connect to smart vehicles and autonomous vehicles to provide valuable information such as guidance, routing, traffic data etc. This works by making a "handshake" with the vehicle when it comes into range. This system is only a concept for now as we do not have access to such vehicles on our current scale.
-
-b) Roads also connect to their neighbouring roads if they have the system enabled, allowing smart routing without the need for a strong internet connection. For example, if a road is shut due to construction work, flooding or other roadblocks and the system has been updated with that information, then the adjacent roads can communicate that information to any incoming connected vehicles, so they know not to take that road.
+- Roads connect to smart vehicles and autonomous vehicles to provide valuable information such as guidance, routing, traffic data etc. This works by making a "handshake" with the vehicle when it comes into range. This system is only a concept for now as we do not have access to such vehicles on our current scale.
+- Roads also connect to their neighbouring roads if they have the system enabled, allowing smart routing without the need for a strong internet connection. For example, if a road is shut due to construction work, flooding or other roadblocks and the system has been updated with that information, then the adjacent roads can communicate that information to any incoming connected vehicles, so they know not to take that road.
 	
 **3. Master Slave model**
 
